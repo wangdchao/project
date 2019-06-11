@@ -25,6 +25,7 @@ uniform sampler2D texture_diffuse2;
 uniform sampler2D texture_specular0;
 uniform sampler2D texture_specular1;
 uniform sampler2D texture_specular2;
+uniform vec3 object_Color;
 
 out vec4 color;
 
@@ -52,7 +53,6 @@ void main()
 			+ light.linear * distance
 			+ light.quadratic * distance * distance);
 
-	vec3	result = (ambient + diffuse + specular) * attenuation;
-	
+	vec3 result = (ambient + diffuse + specular) * attenuation * object_Color;;
 	color	= vec4(result , 1.0f);
 }
