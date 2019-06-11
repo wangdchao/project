@@ -13,6 +13,7 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+
 // 包含着色器加载库
 #include "shader.h"
 // 包含相机控制辅助类
@@ -41,8 +42,8 @@ bool keyPressedStatus[1024]; // 按键情况记录
 GLfloat deltaTime = 0.0f; // 当前帧和上一帧的时间差
 GLfloat lastFrame = 0.0f; // 上一帧时间
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-glm::vec3 lampPos(0.5f, 0.5f, 0.5f);
-
+glm::vec3 lampPos(0.0f, 0.5f, 0.7f);
+Model objModel;
 int main(int argc, char** argv)
 {
 
@@ -97,8 +98,7 @@ int main(int argc, char** argv)
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	//Section1 加载模型数据
-	Model objModel;
-	if (!objModel.loadModel("../../../resources/models/baolingqiu/MyModel.obj"))
+	if (!objModel.loadModel("../../../resources/models/baolingqiu/BowlingSetup.obj"))
 	{
 		glfwTerminate();
 		std::system("pause");
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
 		GLint viewPosLoc = glGetUniformLocation(shader.programId, "viewPos");
 		glUniform3f(viewPosLoc, camera.position.x, camera.position.y, camera.position.z);
 		glm::mat4 projection = glm::perspective(camera.mouse_zoom,
-			(GLfloat)(WINDOW_WIDTH) / WINDOW_HEIGHT, 1.0f, 100.0f); // 投影矩阵
+			(GLfloat)(WINDOW_WIDTH) / WINDOW_HEIGHT, 0.001f, 1000.0f); // 投影矩阵
 		glm::mat4 view = camera.getViewMatrix(); // 视变换矩阵
 		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "projection"),
 			1, GL_FALSE, glm::value_ptr(projection));
@@ -213,4 +213,13 @@ void do_movement()
 		camera.handleKeyPress(LEFT, deltaTime);
 	if (keyPressedStatus[GLFW_KEY_D])
 		camera.handleKeyPress(RIGHT, deltaTime);
+	//控制小球的移动
+	if (keyPressedStatus[GLFW_KEY_H])
+		objModel.move_ball(0);
+	if (keyPressedStatus[GLFW_KEY_K])
+		objModel.move_ball(1);
+	if (keyPressedStatus[GLFW_KEY_U])
+		objModel.move_ball(2);
+	if (keyPressedStatus[GLFW_KEY_J])
+		objModel.move_ball(3);
 }

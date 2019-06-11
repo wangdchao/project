@@ -1,24 +1,41 @@
 #ifndef _MODEL_H_
 #define _MODEL_H_
 
-#include <map>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "mesh.h"
 #include "texture.h"
+#include "physics.h"
+#include <map>
 
 /*
 * 代表一个模型 模型可以包含一个或多个Mesh
 */
+//是瓶子的mesh的序号：3/5/7/9/11/13/15/17/19/22
 class Model
 {
 public:
-	void draw(const Shader& shader) const
+	void draw(Shader& shader)
 	{
-		for (std::vector<Mesh>::const_iterator it = this->meshes.begin(); this->meshes.end() != it; ++it)
+		for (std::vector<Mesh>::iterator it = this->meshes.begin(); this->meshes.end() != it; ++it)
 		{
+			if (it->flag) {
+				continue;
+			}
 			it->draw(shader);
+			//std::cout << "draw" << endl;
+		}
+		//std::cout << this->hight << endl;
+		for (auto pair : this->Circles) {
+			//Circle c = pair.second;
+			//cout << c.x << " " << c.y << " " << c.r << endl;
+			//判断是否发生了撞击事件
+			if (!this->meshes[pair.first].flag && if_collision(this->bcircle, pair.second)) {
+				this->meshes[pair.first].flag = true;
+				this->meshes[this->huawen[pair.first]].flag = true;
+				cout << "撞到了" << this->cnumber[pair.first] << "号球！" << endl;
+			}
 		}
 	}
 	bool loadModel(const std::string& filePath)
@@ -45,7 +62,61 @@ public:
 			std::cerr << "Error:Model::loadModel, process node failed."<< std::endl;
 			return false;
 		}
+		//计算高度
+		this->hight = meshes[21].get_height();
+		this->bcircle = this->meshes[21].get_circle(this->hight);
+		for (int i = 0; i < 24; i++) {
+			if (this->is_pin[i] == 1) {
+				this->Circles[i] = this->meshes[i].get_circle(this->hight);
+			}
+		}
+		//手动输入映射关系
+		this->cnumber[13] = 1;
+		this->cnumber[11] = 2;
+		this->cnumber[17] = 3;
+		this->cnumber[9] = 4;
+		this->cnumber[15] = 5;
+		this->cnumber[3] = 6;
+		this->cnumber[19] = 7;
+		this->cnumber[22] = 8;
+		this->cnumber[5] = 9;
+		this->cnumber[7] = 10;
+		this->huawen[13] = 14;
+		this->huawen[11] = 12;
+		this->huawen[17] = 18;
+		this->huawen[9] = 10;
+		this->huawen[15] = 16;
+		this->huawen[3] = 4;
+		this->huawen[19] = 20;
+		this->huawen[22] = 23;
+		this->huawen[5] = 6;
+		this->huawen[7] = 8;
 		return true;
+	}
+	//移动保龄球
+	void move_ball(int code) {
+		switch (code)
+		{
+		case 0:
+			//std::cout << meshes.size() << std::endl;
+			this->meshes[21].move(glm::vec3(-0.1f, 0.0f, 0.0f));
+			this->bcircle.x = this->bcircle.x - 0.1f;
+			break;
+		case 1:
+			this->meshes[21].move(glm::vec3(0.1f, 0.0f, 0.0f));
+			this->bcircle.x = this->bcircle.x + 0.1f;
+			break;
+		case 2:
+			this->meshes[21].move(glm::vec3(0.0f, 0.0f, 0.1f));
+			this->bcircle.y = this->bcircle.y + 0.1f;
+			break;
+		case 3:
+			this->meshes[21].move(glm::vec3(0.0f, 0.0f, -0.1f));
+			this->bcircle.y = this->bcircle.y - 0.1f;
+			break;
+		default:
+			break;
+		}
 	}
 	~Model()
 	{
@@ -203,8 +274,14 @@ private:
 		return true;
 	}
 private:
+	int is_pin[24] = { 0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,1,0};
+	map<int, Circle> Circles; //保存每个保龄球对应的半径
+	map<int, int> cnumber;//保存每个保龄球对应的编号
+	map<int, int> huawen;//保存每个保龄球对应的花纹
 	std::vector<Mesh> meshes; // 保存Mesh
 	std::string modelFileDir; // 保存模型文件的文件夹路径
+	float hight;//保龄球的圆心所对应的高度
+	Circle bcircle;//保龄球对应的圆心
 	typedef std::map<std::string, Texture> LoadedTextMapType; // key = texture file path
 	LoadedTextMapType loadedTextureMap; // 保存已经加载的纹理
 };
