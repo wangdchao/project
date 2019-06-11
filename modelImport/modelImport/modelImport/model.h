@@ -18,12 +18,26 @@ class Model
 public:
 	void draw(Shader& shader)
 	{
+		int i = 0;
 		for (std::vector<Mesh>::iterator it = this->meshes.begin(); this->meshes.end() != it; ++it)
 		{
 			if (it->flag) {
+				i++;
 				continue;
 			}
-			it->draw(shader);
+			if (i == 21) {
+				it->draw(shader, glm::vec3(0.572549f, 0.258824f, 0.858824f));
+			}
+			else if (this->is_pin[i] == 1) {
+				it->draw(shader, glm::vec3(0.94902f, 0.94902f, 0.666667f));
+			}
+			else if (i > 1 && this->is_pin[i-1] == 1){
+				it->draw(shader, glm::vec3(0.639216f, 0.478431f, 0.807843f));
+			}
+			else {
+				it->draw(shader, glm::vec3(0.266667f, 0.898039f, 0.372549f));
+			}
+			i++;
 			//std::cout << "draw" << endl;
 		}
 		//std::cout << this->hight << endl;

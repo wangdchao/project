@@ -120,7 +120,7 @@ int main(int argc, char** argv)
 		do_movement(); // 根据用户操作情况 更新相机属性
 
 					   // 清除颜色缓冲区 重置为指定颜色
-		glClearColor(0.18f, 0.04f, 0.14f, 1.0f);
+		glClearColor(0.996078f, 0.937255f, 0.262745f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.use();

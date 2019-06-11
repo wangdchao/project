@@ -46,10 +46,10 @@ class Mesh
 {
 public:
 	bool flag = false;
-	void draw(Shader& shader) // »æÖÆMesh
+	void draw(Shader& shader, glm::vec3 color) // »æÖÆMesh
 	{
 		shader.use();
-		shader.setVec3("object_Color", glm::vec3(1.0f, 0.7f, 0.6f));
+		shader.setVec3("object_Color", color);
 		glBindVertexArray(this->VAOId);
 		int diffuseCnt = 0, specularCnt = 0,texUnitCnt = 0;
 		for (std::vector<Texture>::const_iterator it = this->textures.begin(); 
