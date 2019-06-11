@@ -7,6 +7,12 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include "glm/glm.hpp"
+using namespace std;
 
 struct ShaderFile
 {
@@ -38,6 +44,12 @@ public:
 	{
 		glUseProgram(this->programId);
 	}
+	
+	void setVec3(string name, glm::vec3 value) 
+	{
+		glUniform3fv(glGetUniformLocation(this->programId, name.c_str()), 1, &value[0]);
+	}
+
 	~Shader()
 	{
 		if (this->programId)
