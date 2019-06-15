@@ -54,3 +54,7 @@ bool if_collision(Circle c1, Circle c2) {
 	float rsum = c1.r + c2.r;
 	return distance <= rsum;
 }
+
+bool if_collision(Circle c1, GLfloat line) {
+	return (fabs(c1.x - line) <= c1.r || fabs(c1.y - line) <= c1.r);
+}

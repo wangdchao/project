@@ -15,6 +15,13 @@ enum Camera_Movement {
 	LEFT,
 	RIGHT
 };
+
+enum ViewPort {
+	FREE,
+	BOWLING,
+	HUMAN
+};
+
 // 定义预设常量
 const GLfloat YAW = 0.0f;
 const GLfloat PITCH = 0.0f;
@@ -40,6 +47,9 @@ public:
 	glm::mat4 getViewMatrix()
 	{
 		return glm::lookAt(this->position, this->position + this->forward, this->viewUp);
+	}
+	glm::mat4 getViewMatrixB() {
+		return glm::lookAt(this->bowlingposition, this->bowlingposition + this->bowlingforward, this->bowlingup);
 	}
 	// 处理键盘按键后方向移动
 	void handleKeyPress(Camera_Movement direction, GLfloat deltaTime)
@@ -115,6 +125,7 @@ public:
 	glm::vec3 forward,up, side, viewUp, position; // 相机属性
 	GLfloat yawAngle, pitchAngle; // 欧拉角
 	GLfloat moveSpeed, mouse_sensitivity, mouse_zoom; // 相机选项
+	glm::vec3 bowlingposition, bowlingup, bowlingforward;
 };
 
 #endif

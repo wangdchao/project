@@ -48,7 +48,7 @@ public:
 	bool flag = false;
 	void draw(Shader& shader, glm::vec3 color) // »æÖÆMesh
 	{
-		shader.use();
+		shader.Use();
 		shader.setVec3("object_Color", color);
 		glBindVertexArray(this->VAOId);
 		int diffuseCnt = 0, specularCnt = 0,texUnitCnt = 0;
@@ -63,7 +63,7 @@ public:
 					glBindTexture(GL_TEXTURE_2D, it->id);
 					std::stringstream samplerNameStr;
 					samplerNameStr << "texture_diffuse" << diffuseCnt++;
-					glUniform1i(glGetUniformLocation(shader.programId, 
+					glUniform1i(glGetUniformLocation(shader.ID, 
 						samplerNameStr.str().c_str()), texUnitCnt++);
 				}
 				break;
@@ -73,7 +73,7 @@ public:
 						glBindTexture(GL_TEXTURE_2D, it->id);
 						std::stringstream samplerNameStr;
 						samplerNameStr << "texture_specular" << specularCnt++;
-						glUniform1i(glGetUniformLocation(shader.programId,
+						glUniform1i(glGetUniformLocation(shader.ID,
 									samplerNameStr.str().c_str()), texUnitCnt++);
 				}
 				break;
@@ -109,17 +109,6 @@ public:
 		glDeleteVertexArrays(1, &this->VAOId);
 		glDeleteBuffers(1, &this->VBOId);
 		glDeleteBuffers(1, &this->EBOId);
-	}
-	void move(glm::vec3 direction) {
-		for (auto & v : this->vertData) {
-			//cout << v.position.x << " ";
-			v.position.x += direction.x;
-			v.position.y += direction.y;
-			v.position.z += direction.z;
-			//cout << v.position.x << endl;
-		}
-		//cout << this->vertData.size() << endl;
-		this->setupMesh();
 	}
 	Circle get_circle(float height) {
 		vector<glm::vec2> points;
