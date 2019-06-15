@@ -48,11 +48,11 @@ void main()
 	vec3	specular = specFactor * light.specular ;
 
 	// ???????????
-	float distance = length(light.position - FragPos); // ????????????§Þ??????
+	/*float distance = length(light.position - FragPos); // ????????????§Þ??????
 	float attenuation = 1.0f / (light.constant 
 			+ light.linear * distance
-			+ light.quadratic * distance * distance);
+			+ light.quadratic * distance * distance);*/
 
-	vec3 result = (ambient + diffuse + specular) * attenuation * object_Color;;
+	vec3 result = ambient * object_Color + (diffuse + specular) * object_Color;
 	color	= vec4(result , 1.0f);
 }
