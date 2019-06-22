@@ -119,8 +119,8 @@ int main(int argc, char** argv)
 	ResourceManager::LoadShader("model.vertex", "model.frag", nullptr, "ballModel",true);
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 
 	
 	// 开始游戏主循环
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
 		do_movement(); // 根据用户操作情况 更新相机属性
 
 					   // 清除颜色缓冲区 重置为指定颜色
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		
@@ -149,8 +149,8 @@ int main(int argc, char** argv)
 		glm::mat4 projection;
 		if(viewfrom==FREE) projection = glm::perspective(camera.mouse_zoom,
 			(GLfloat)(WINDOW_WIDTH) / WINDOW_HEIGHT, 0.001f, 1000.0f); // 投影矩阵
-		else if(viewfrom==BOWLING) projection = glm::perspective(45.0f,
-			(GLfloat)(WINDOW_WIDTH) / WINDOW_HEIGHT, 0.001f, 1000.0f);
+		else if(viewfrom==BOWLING) projection = glm::perspective(30.0f,
+			(GLfloat)(WINDOW_WIDTH) / WINDOW_HEIGHT, 0.001f, 100.0f);
 		ResourceManager::GetShader("objModel").SetMatrix4("projection", projection, true);
 		ResourceManager::GetShader("ballModel").SetMatrix4("projection", projection, true);
 
@@ -169,7 +169,8 @@ int main(int argc, char** argv)
 		ballmodel= glm::scale(ballmodel, glm::vec3(0.02f, 0.02f, 0.02f));
 		ResourceManager::GetShader("ballModel").SetMatrix4("model", ballmodel, true);
 		camera.bowlingposition = glm::vec3(0.0f, -1.45f, 0.0f) + offset;
-		camera.bowlingup = glm::vec3(0.0f, 1.0f, 0.0f);
+		camera.bowlingup = glm::vec3(0.0f, -1.0f, 0.0f);
+		camera.bowlingforward = glm::vec3(0.0, -1.0, -1.0);
 		// 这里填写场景绘制代码
 		objModel.draw(ResourceManager::GetShader("objModel"),ResourceManager::GetShader("ballModel")); // 绘制物体
 		glBindVertexArray(0);
@@ -243,36 +244,36 @@ void do_movement()
 	{
 		float dis=objModel.move_ball(0);
 		offset += glm::vec3(dis*0.02, 0.0f, 0.0f);
-		rightangle -= dis == 0.0 ? 0 : 10*fabs(dis/0.1);
+		rightangle -= dis == 0.0 ? 0 : 20*fabs(dis/0.05);
 		angle = rightangle;
 		coord = glm::vec3(0.0, 0.0, 1.0);
-		camera.bowlingforward = glm::vec3(-1.0, -1.0, 0.0);
+		//camera.bowlingforward = glm::vec3(-1.0, -1.0, 0.0);
 	}
 	if (keyPressedStatus[GLFW_KEY_K])
 	{
 		float dis=objModel.move_ball(1);
 		offset += glm::vec3(0.02*dis, 0.0f, 0.0f);
-		rightangle += dis == 0.0 ? 0 : 10* fabs(dis / 0.1);
+		rightangle += dis == 0.0 ? 0 : 20* fabs(dis / 0.05);
 		angle = rightangle;
 		coord = glm::vec3(0.0, 0.0, 1.0);
-		camera.bowlingforward = glm::vec3(1.0, -1.0, 0.0);
+		//camera.bowlingforward = glm::vec3(1.0, -1.0, 0.0);
 	}
 	if (keyPressedStatus[GLFW_KEY_U])
 	{
 		float dis=objModel.move_ball(2);
 		offset += glm::vec3(0.0f, 0.0f, 0.02f*dis);
-		fontangle += dis == 0.0 ? 0 : 10* fabs(dis / 0.1);
+		fontangle += dis == 0.0 ? 0 : 20* fabs(dis / 0.05);
 		angle = fontangle;
 		coord = glm::vec3(1.0, 0.0, 0.0);
-		camera.bowlingforward = glm::vec3(0.0, -1.0, -1.0);
+		
 	}
 	if (keyPressedStatus[GLFW_KEY_J])
 	{
 		float dis=objModel.move_ball(3);
 		offset += glm::vec3(0.0f, 0.0f, 0.02*dis);
-		fontangle -= dis==0.0?0:10* fabs(dis / 0.1);
+		fontangle -= dis==0.0?0:20* fabs(dis / 0.05);
 		angle = fontangle;
 		coord = glm::vec3(1.0, 0.0, 0.0);
-		camera.bowlingforward = glm::vec3(0.0, -1.0, 1.0);
+		//camera.bowlingforward = glm::vec3(0.0, -1.0, 1.0);
 	}
 }

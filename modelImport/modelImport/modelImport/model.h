@@ -30,13 +30,13 @@ public:
 				it->draw(shader1, glm::vec3(0.572549f, 0.258824f, 0.858824f));
 			}
 			else if (this->is_pin[i] == 1) {
-				it->draw(shader, glm::vec3(0.94902f, 0.94902f, 0.666667f));
+				it->draw(shader, glm::vec3(1.0f, 1.0f, 1.0f));
 			}
 			else if (i > 1 && this->is_pin[i-1] == 1){
 				it->draw(shader, glm::vec3(0.639216f, 0.478431f, 0.807843f));
 			}
 			else {
-				it->draw(shader, glm::vec3(0.266667f, 0.898039f, 0.372549f));
+				it->draw(shader, glm::vec3(0.166667f, 0.598039f, 0.172549f));
 			}
 			i++;
 			//std::cout << "draw" << endl;
@@ -117,14 +117,14 @@ public:
 			if (if_collision(bcircle, -5.906112)) returnvalue = 0.0;
 			else {
 				Circle temp = this->bcircle;
-				temp.x = temp.x - 0.1f;
+				temp.x = temp.x - 0.05f;
 				if (if_collision(temp, -5.906112)) {
 					this->bcircle.x += -5.906112-this->bcircle.x+this->bcircle.r;
 					returnvalue = -5.906112 - this->bcircle.x + this->bcircle.r;
 				}
 				else {
-					this->bcircle.x = this->bcircle.x - 0.1f;
-					returnvalue = -0.1f;
+					this->bcircle.x = this->bcircle.x - 0.05f;
+					returnvalue = -0.05f;
 				}
 			}
 			break;
@@ -132,14 +132,14 @@ public:
 			if (if_collision(bcircle, 5.882723)) returnvalue = 0.0;
 			else {
 				Circle temp = this->bcircle;
-				temp.x = temp.x + 0.1f;
+				temp.x = temp.x + 0.05f;
 				if (if_collision(temp, 5.882723)) {
 					this->bcircle.x += 5.882723-this->bcircle.x-this->bcircle.r;
 					returnvalue = 5.882723 - this->bcircle.x - this->bcircle.r;
 				}
 				else {
-					this->bcircle.x = this->bcircle.x + 0.1f;
-					returnvalue = 0.1f;
+					this->bcircle.x = this->bcircle.x + 0.05f;
+					returnvalue = 0.05f;
 				}
 			}
 			break;
@@ -147,14 +147,14 @@ public:
 			if (if_collision(bcircle, -9.132236)) returnvalue = 0.0;
 			else {
 				Circle temp = this->bcircle;
-				temp.y = temp.y - 0.1f;
+				temp.y = temp.y - 0.05f;
 				if (if_collision(temp, -9.132236)) {
 					this->bcircle.y += -9.132236-this->bcircle.y+this->bcircle.r;
 					returnvalue = -9.132236 - this->bcircle.y + this->bcircle.r;
 				}
 				else {
-					this->bcircle.y = this->bcircle.y - 0.1f;
-					returnvalue = -0.1f;
+					this->bcircle.y = this->bcircle.y - 0.05f;
+					returnvalue = -0.05f;
 				}
 			}
 			break;
@@ -162,14 +162,14 @@ public:
 			if (if_collision(bcircle, 29.099463)) returnvalue = 0.0;
 			else {
 				Circle temp = this->bcircle;
-				temp.y = temp.y + 0.1f;
+				temp.y = temp.y + 0.05f;
 				if (if_collision(temp, 29.099463)) {
 					this->bcircle.y += 29.099463 -this->bcircle.y-this->bcircle.r;
 					returnvalue = 29.099463 - this->bcircle.y - this->bcircle.r;
 				}
 				else {
-					this->bcircle.y = this->bcircle.y + 0.1f;
-					returnvalue = 0.1f;
+					this->bcircle.y = this->bcircle.y + 0.05f;
+					returnvalue = 0.05f;
 				}
 			}
 			break;

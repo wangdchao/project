@@ -86,7 +86,7 @@ void ResourceManager::setCommonValue(Shader &shader) {
 	GLint attQuadratic = glGetUniformLocation(shader.ID, "light.quadratic");
 
 	glUniform3f(lightAmbientLoc, 0.2f, 0.2f, 0.2f);
-	glUniform3f(lightDiffuseLoc, 0.5f, 0.5f, 0.5f);
+	glUniform3f(lightDiffuseLoc, 1.0f, 1.0f, 1.0f);
 	glUniform3f(lightSpecularLoc, 1.0f, 1.0f, 1.0f);
 	glUniform3f(lightPosLoc, lampPos.x, lampPos.y, lampPos.z);
 	// …Ë÷√À•ºıœµ ˝
