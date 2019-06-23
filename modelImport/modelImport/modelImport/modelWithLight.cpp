@@ -117,6 +117,7 @@ int main(int argc, char** argv)
 	// Section2 准备着色器程序
 	ResourceManager::LoadShader("model.vertex", "model.frag", nullptr, "objModel",true);
 	ResourceManager::LoadShader("model.vertex", "model.frag", nullptr, "ballModel",true);
+	ResourceManager::LoadShader("model.vertex", "model.frag", "model.geometry", "pinModel", true);
 
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
@@ -141,10 +142,12 @@ int main(int argc, char** argv)
 		if (viewfrom == FREE) {
 			ResourceManager::GetShader("objModel").SetVector3f("viewPos", camera.position.x, camera.position.y, camera.position.z, true);
 			ResourceManager::GetShader("ballModel").SetVector3f("viewPos", camera.position.x, camera.position.y, camera.position.z, true);
+			ResourceManager::GetShader("pinModel").SetVector3f("viewPos", camera.position.x, camera.position.y, camera.position.z, true);
 		}
 		else if (viewfrom == BOWLING) {
 			ResourceManager::GetShader("objModel").SetVector3f("viewPos", camera.bowlingposition.x, camera.bowlingposition.y, camera.bowlingposition.z, true);
 			ResourceManager::GetShader("ballModel").SetVector3f("viewPos", camera.bowlingposition.x, camera.bowlingposition.y, camera.bowlingposition.z, true);
+			ResourceManager::GetShader("pinModel").SetVector3f("viewPos", camera.bowlingposition.x, camera.bowlingposition.y, camera.bowlingposition.z, true);
 		}
 		glm::mat4 projection;
 		if(viewfrom==FREE) projection = glm::perspective(camera.mouse_zoom,
@@ -153,16 +156,16 @@ int main(int argc, char** argv)
 			(GLfloat)(WINDOW_WIDTH) / WINDOW_HEIGHT, 0.001f, 100.0f);
 		ResourceManager::GetShader("objModel").SetMatrix4("projection", projection, true);
 		ResourceManager::GetShader("ballModel").SetMatrix4("projection", projection, true);
-
+		ResourceManager::GetShader("pinModel").SetMatrix4("projection", projection, true);
 		glm::mat4 view = viewfrom==FREE?camera.getViewMatrix():camera.getViewMatrixB(); // 视变换矩阵
 		ResourceManager::GetShader("objModel").SetMatrix4("view", view, true);
 		ResourceManager::GetShader("ballModel").SetMatrix4("view", view, true);
-
+		ResourceManager::GetShader("pinModel").SetMatrix4("view", view, true);
 		glm::mat4 objmodel=glm::mat4(1.0f),ballmodel=glm::mat4(1.0f);
 		objmodel = glm::translate(objmodel, glm::vec3(0.0f, -1.55f, 0.0f)); // 适当下调位置
 		objmodel = glm::scale(objmodel, glm::vec3(0.02f, 0.02f, 0.02f)); // 适当缩小模型
 		ResourceManager::GetShader("objModel").SetMatrix4("model", objmodel, true);
-
+		ResourceManager::GetShader("pinModel").SetMatrix4("model", objmodel, true);
 		ballmodel = glm::translate(ballmodel, glm::vec3(0.0f, -1.55f,0.0f) + offset);
 		ballmodel = glm::rotate(ballmodel, glm::radians(angle), coord);
 		ballmodel = glm::translate(ballmodel, glm::vec3(-0.213184*0.02, -1.319366*0.02, -20.650927*0.02));
@@ -172,7 +175,7 @@ int main(int argc, char** argv)
 		camera.bowlingup = glm::vec3(0.0f, -1.0f, 0.0f);
 		camera.bowlingforward = glm::vec3(0.0, -1.0, -1.0);
 		// 这里填写场景绘制代码
-		objModel.draw(ResourceManager::GetShader("objModel"),ResourceManager::GetShader("ballModel")); // 绘制物体
+		objModel.draw(ResourceManager::GetShader("objModel"),ResourceManager::GetShader("ballModel"), ResourceManager::GetShader("pinModel")); // 绘制物体
 		glBindVertexArray(0);
 		glUseProgram(0);
 		glfwSwapBuffers(window); // 交换缓存
