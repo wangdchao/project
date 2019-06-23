@@ -41,6 +41,7 @@ struct Texture
 	std::string path;
 };
 
+
 // 表示一个用于渲染的最小实体
 class Mesh
 {

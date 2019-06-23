@@ -8,11 +8,14 @@
 #include "texture.h"
 #include "physics.h"
 #include <map>
-
+#include <windows.h>
+#include <mmsystem.h>
+#pragma   comment(lib,"winmm.lib") 
 /*
 * 代表一个模型 模型可以包含一个或多个Mesh
 */
 //是瓶子的mesh的序号：3/5/7/9/11/13/15/17/19/22
+//声音管理引擎
 class Model
 {
 public:
@@ -50,6 +53,7 @@ public:
 			//cout << c.x << " " << c.y << " " << c.r << endl;
 			//判断是否发生了撞击事件
 			if (!this->meshes[pair.first].flag && if_collision(this->bcircle, pair.second)) {
+				PlaySound("boom.wav",NULL, SND_ASYNC|SND_FILENAME);
 				if (this->meshes[this->huawen[pair.first]].explode(shader2) && this->meshes[pair.first].explode(shader2)) {
 					this->meshes[pair.first].flag = true;
 					this->meshes[this->huawen[pair.first]].flag = true;
