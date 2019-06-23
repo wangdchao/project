@@ -53,13 +53,13 @@ public:
 			//cout << c.x << " " << c.y << " " << c.r << endl;
 			//判断是否发生了撞击事件
 			if (!this->meshes[pair.first].flag && if_collision(this->bcircle, pair.second)) {
-				PlaySound("boom.wav",NULL, SND_ASYNC|SND_FILENAME);
 				if (this->meshes[this->huawen[pair.first]].explode(shader2) && this->meshes[pair.first].explode(shader2)) {
 					this->meshes[pair.first].flag = true;
 					this->meshes[this->huawen[pair.first]].flag = true;
 					cout << "撞到了" << this->cnumber[pair.first] << "号球！" << endl;
 				}
 				else {
+					PlaySound("boom.wav", NULL, SND_ASYNC | SND_FILENAME);
 					this->meshes[pair.first].draw(shader2, glm::vec3(1.0f, 1.0f, 1.0f));
 					this->meshes[this->huawen[pair.first]].draw(shader2, glm::vec3(0.639216f, 0.478431f, 0.807843f));
 				}
@@ -360,4 +360,4 @@ private:
 	LoadedTextMapType loadedTextureMap; // 保存已经加载的纹理
 };
 
-#endif
+#endif 
