@@ -8,15 +8,18 @@
 #include "texture.h"
 #include "physics.h"
 #include <map>
-
+#include <windows.h>
+#include <mmsystem.h>
+#pragma   comment(lib,"winmm.lib") 
 /*
 * 代表一个模型 模型可以包含一个或多个Mesh
 */
 //是瓶子的mesh的序号：3/5/7/9/11/13/15/17/19/22
+//声音管理引擎
 class Model
 {
 public:
-	void draw(Shader& shader,Shader &shader1)
+	void draw(Shader& shader,Shader &shader1,Shader &shader2)
 	{
 		//printf("Circle: %f %f %f\n", bcircle.x, bcircle.y, hight);
 		int i = 0;
@@ -30,10 +33,13 @@ public:
 				it->draw(shader1, glm::vec3(0.572549f, 0.258824f, 0.858824f));
 			}
 			else if (this->is_pin[i] == 1) {
-				it->draw(shader, glm::vec3(1.0f, 1.0f, 1.0f));
+				shader2.SetFloat("time", -3.1415926535f / 2.0f, true);
+				it->draw(shader2, glm::vec3(1.0f, 1.0f, 1.0f));
 			}
 			else if (i > 1 && this->is_pin[i-1] == 1){
-				it->draw(shader, glm::vec3(0.639216f, 0.478431f, 0.807843f));
+				//cout <<sin(glfwGetTime() / 10.0f) << endl;
+				shader2.SetFloat("time", -3.1415926535f/2.0f, true);
+				it->draw(shader2, glm::vec3(0.639216f, 0.478431f, 0.807843f));
 			}
 			else {
 				it->draw(shader, glm::vec3(0.166667f, 0.598039f, 0.172549f));
@@ -47,9 +53,16 @@ public:
 			//cout << c.x << " " << c.y << " " << c.r << endl;
 			//判断是否发生了撞击事件
 			if (!this->meshes[pair.first].flag && if_collision(this->bcircle, pair.second)) {
-				this->meshes[pair.first].flag = true;
-				this->meshes[this->huawen[pair.first]].flag = true;
-				cout << "撞到了" << this->cnumber[pair.first] << "号球！" << endl;
+				if (this->meshes[this->huawen[pair.first]].explode(shader2) && this->meshes[pair.first].explode(shader2)) {
+					this->meshes[pair.first].flag = true;
+					this->meshes[this->huawen[pair.first]].flag = true;
+					cout << "撞到了" << this->cnumber[pair.first] << "号球！" << endl;
+				}
+				else {
+					PlaySound("boom.wav", NULL, SND_ASYNC | SND_FILENAME);
+					this->meshes[pair.first].draw(shader2, glm::vec3(1.0f, 1.0f, 1.0f));
+					this->meshes[this->huawen[pair.first]].draw(shader2, glm::vec3(0.639216f, 0.478431f, 0.807843f));
+				}
 			}
 		}
 	}
@@ -347,4 +360,4 @@ private:
 	LoadedTextMapType loadedTextureMap; // 保存已经加载的纹理
 };
 
-#endif
+#endif 

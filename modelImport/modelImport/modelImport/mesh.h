@@ -41,6 +41,7 @@ struct Texture
 	std::string path;
 };
 
+
 // 表示一个用于渲染的最小实体
 class Mesh
 {
@@ -104,6 +105,14 @@ public:
 		this->textures = textures;
 		this->setupMesh();
 	}
+	bool explode(Shader& shader) {
+		time += 0.5;
+		if (time > 1.5f) {
+			return true;
+		}
+		shader.SetFloat("time", time, true);
+		return false;
+	}
 	void final() const
 	{
 		glDeleteVertexArrays(1, &this->VAOId);
@@ -149,6 +158,7 @@ private:
 	std::vector<GLuint> indices;
 	std::vector<Texture> textures;
 	GLuint VAOId, VBOId, EBOId;
+	float time = -0.0f;
 
 	void setupMesh()  // 建立VAO,VBO等缓冲区
 	{
